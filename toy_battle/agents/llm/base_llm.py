@@ -102,7 +102,7 @@ class LLMAgent(Agent):
         *,
         api_key: Optional[str] = None,
         max_retries: int = 2,
-        image_dir: str = ".llm_frames",
+        image_dir: str = "renders/llm_frames",
         temperature: float = 0.2,
         name: Optional[str] = None,
         **kwargs,
@@ -237,11 +237,13 @@ def _extract_index(resp: LLMResponse) -> Optional[int]:
 def _vision_brief(obs: dict) -> str:
     b = obs["board"]
     rack = ", ".join(f"{t['name']}(f{t['force']})" for t in obs["your_rack"]) or "(empty)"
+    foe_last = obs["opponent"].get("last_action") or "(none yet)"
     lines = [
         f"Toy Battle — {b['display_name']}. You are {obs['you'].upper()}.",
         f"Objective: {b['medal_objective']} medals. "
         f"Your medals: {obs['your_medals']}, opponent: {obs['opponent']['medals']}.",
         f"Your rack: {rack}.",
+        f"Opponent's last action: {foe_last}.",
         "Read the attached board image to see which troops occupy which bases, "
         "their forces, and remaining region medals. Then pick from the legal moves:",
     ]

@@ -148,11 +148,17 @@ def render_state(state: GameState, path: str | Path) -> str:
     blue_m = state.players["blue"].medals
     _text_center(
         draw,
-        (W // 2, H - 24),
+        (W // 2, H - 42),
         f"RED medals: {red_m}    |    BLUE medals: {blue_m}    |    to move: {state.current.upper()}",
         f_label,
         COLORS["text"],
     )
+    # Last action line (the "foe action" describer), if any.
+    if state.last_action_by and state.last_action_summary:
+        last = f"Last: {state.last_action_by.upper()} {state.last_action_summary}"
+        if len(last) > 90:
+            last = last[:87] + "..."
+        _text_center(draw, (W // 2, H - 16), last, f_small, COLORS["base_edge"])
 
     path = str(path)
     img.save(path)

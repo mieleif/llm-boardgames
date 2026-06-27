@@ -105,7 +105,9 @@ def build_observation(state: GameState, color: str) -> dict:
             "reserve_count": len(opp.reserve),
             "discard": [_tile_view(t) for t in opp.discard],
             "medals": opp.medals,
+            "last_action": state.last_moves.get(opp_color),
         },
+        "your_last_action": state.last_moves.get(color),
         "bases": bases,
         "regions": regions,
         "your_hq": board.hq_of(color),
@@ -134,6 +136,8 @@ def observation_to_text(obs: dict) -> str:
     )
     if obs.get("winner"):
         lines.append(f"GAME OVER — winner: {obs['winner']} ({obs['end_reason']})")
+    foe_last = obs["opponent"].get("last_action")
+    lines.append(f"Opponent's last action: {foe_last if foe_last else '(none yet)'}")
     lines.append("")
     lines.append(
         f"Your medals: {obs['your_medals']}/{b['medal_objective']}  | "

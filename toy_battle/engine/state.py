@@ -82,6 +82,9 @@ class GameState:
     end_reason: str | None = None
     turn_count: int = 0
     history: list[str] = field(default_factory=list)  # human-readable log lines
+    last_moves: dict[str, str] = field(default_factory=dict)  # colour -> last action summary
+    last_action_by: str | None = None
+    last_action_summary: str | None = None
 
     # --- queries -----------------------------------------------------------
     def opponent(self, color: str) -> str:
@@ -136,6 +139,9 @@ class GameState:
             end_reason=self.end_reason,
             turn_count=self.turn_count,
             history=list(self.history),
+            last_moves=dict(self.last_moves),
+            last_action_by=self.last_action_by,
+            last_action_summary=self.last_action_summary,
         )
 
 

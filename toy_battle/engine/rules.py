@@ -32,16 +32,53 @@ def apply_move(state: GameState, move: Move, decider=None) -> GameState:
 
     move = _validate(state, move)
 
+    pre_desc = move.describe(state)  # while the tile is still on the rack
+    medals_before = state.players[color].medals
+    hist_start = len(state.history)
+
     if move.kind == MoveKind.DRAW:
         _do_draw(state, color)
     else:
         _do_place_action(state, color, move, decider)
+
+    _record_last_action(state, color, pre_desc, medals_before, hist_start)
 
     state.turn_count += 1
     if state.winner is None:
         state.current = state.opponent(color)
         _maybe_end_stuck(state)
     return state
+
+
+# Keywords used to surface the notable consequences of a move in its summary.
+_EFFECT_KEYWORDS = (
+    "controls region",
+    "captures",
+    "discards",
+    "returns",
+    "draws",
+    "places extra",
+)
+
+
+def _record_last_action(
+    state: GameState, color: str, pre_desc: str, medals_before: int, hist_start: int
+) -> None:
+    """Store a one-line, opponent-visible summary of what ``color`` just did."""
+    summary = pre_desc
+    delta = state.players[color].medals - medals_before
+    extras = [
+        ln.strip()
+        for ln in state.history[hist_start:]
+        if any(k in ln for k in _EFFECT_KEYWORDS)
+    ]
+    if delta > 0:
+        summary += f"  (+{delta} medals)"
+    if extras:
+        summary += " | " + "; ".join(extras[:3])
+    state.last_moves[color] = summary
+    state.last_action_by = color
+    state.last_action_summary = summary
 
 
 def _validate(state: GameState, move: Move) -> Move:

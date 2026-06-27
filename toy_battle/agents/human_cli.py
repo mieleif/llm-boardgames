@@ -12,7 +12,7 @@ from .base import Agent
 
 
 class HumanCliAgent(Agent):
-    def __init__(self, color: str, render_image: bool = True, image_dir: str = ".", **kwargs):
+    def __init__(self, color: str, render_image: bool = True, image_dir: str = "renders", **kwargs):
         super().__init__(color, name=kwargs.pop("name", "human"), **kwargs)
         self.render_image = render_image
         self.image_dir = image_dir

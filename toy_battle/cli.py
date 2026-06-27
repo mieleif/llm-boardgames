@@ -85,9 +85,13 @@ def cmd_render(args: argparse.Namespace) -> int:
     from .engine import new_game
     from .render.image import render_state
 
+    import os
+
     board = load_board(args.board)
     state = new_game(board, seed=args.seed)
-    path = render_state(state, args.out)
+    out = args.out
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+    path = render_state(state, out)
     print(f"Rendered initial board to {path}")
     return 0
 
@@ -120,7 +124,7 @@ def build_parser() -> argparse.ArgumentParser:
     pr = sub.add_parser("render", help="render a board to PNG")
     pr.add_argument("--board", default="plaine_des_chateaux")
     pr.add_argument("--seed", type=int, default=0)
-    pr.add_argument("--out", default="board.png")
+    pr.add_argument("--out", default="renders/board.png")
     pr.set_defaults(func=cmd_render)
 
     return p

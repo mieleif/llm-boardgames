@@ -14,10 +14,15 @@ venv/
 .coverage
 htmlcov/
 
-# Generated artifacts
+# Generated artifacts (board renders, LLM frames, match logs)
+renders/
 results/
 .llm_frames/
 board_turn_*.png
 *.jsonl
 sample_board.png
 board.png
+
+# Local-only reference photos of the physical game (copyrighted — never committed)
+assets/reference/*
+!assets/reference/README.md
