@@ -3,7 +3,7 @@
   "display_name": "La plaine des chateaux",
   "medal_objective": 7,
   "colors": ["red", "blue"],
-  "_note": "Symmetric graph authored from the map photo. Red HQ (top) and blue HQ (bottom) are chained to two corner bases each; a central river is crossed by three bridge bases (br_l/br_c/br_r). Four 'retreat' special bases (effect=plaine_return). Regions list the bases that surround them; controlling all of them captures the medals. Coordinates (x,y in 0..100) are for rendering only. Easily editable to refine topology.",
+  "_note": "Symmetric graph authored from the map photo. Red HQ (top) and blue HQ (bottom) are chained to two corner bases each; a central river is crossed by three bridge bases (br_l/br_c/br_r). The two middle bases on each rank are NOT directly linked (no b_ul-b_ur or b_ll-b_lr edge): the 3-medal regions sit in the open gap there. The 2-medal regions are the river gaps between each side bridge and the centre bridge (r_mid_l/r_mid_r). Four 'retreat' special bases (effect=plaine_return). Regions list the bases that surround them; controlling all of them captures the medals. Coordinates (x,y in 0..100) are for rendering only.",
   "nodes": [
     {"id": "hq_red", "kind": "hq", "owner": "red", "x": 50, "y": 6},
     {"id": "hq_blue", "kind": "hq", "owner": "blue", "x": 50, "y": 94},
@@ -37,7 +37,6 @@
     ["s_ul", "br_l"],
     ["s_ur", "b_ur"],
     ["s_ur", "br_r"],
-    ["b_ul", "b_ur"],
     ["b_ul", "br_l"],
     ["b_ul", "br_c"],
     ["b_ur", "br_r"],
@@ -52,7 +51,6 @@
     ["s_ll", "b_bl"],
     ["s_lr", "b_lr"],
     ["s_lr", "b_br"],
-    ["b_ll", "b_lr"],
     ["b_ll", "b_bl"],
     ["b_lr", "b_br"],
     ["hq_blue", "b_bl"],
@@ -65,7 +63,7 @@
     {"id": "r_ur", "border": ["b_tr", "b_ur", "s_ur"], "medals": 1},
     {"id": "r_ll", "border": ["b_bl", "b_ll", "s_ll"], "medals": 1},
     {"id": "r_lr", "border": ["b_br", "b_lr", "s_lr"], "medals": 1},
-    {"id": "r_mid_l", "border": ["s_ul", "br_l", "s_ll"], "medals": 2},
-    {"id": "r_mid_r", "border": ["s_ur", "br_r", "s_lr"], "medals": 2}
+    {"id": "r_mid_l", "border": ["br_l", "b_ul", "br_c", "b_ll"], "medals": 2},
+    {"id": "r_mid_r", "border": ["br_r", "b_ur", "br_c", "b_lr"], "medals": 2}
   ]
 }
