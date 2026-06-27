@@ -53,11 +53,14 @@ tests/               engine, board, effects, LLM-pipeline (no network)
   reproducible matches. The JSONL log replays a game move by move.
 
 - **Two LLM modes behind one pipeline.**
-  - *tool mode*: full structured text state + a `submit_move` tool (tests tool
-    use + rule understanding).
-  - *vision mode*: a rendered PNG + minimal text with per-base occupancy
-    withheld, so the model must read the board (tests OCR). Both share parsing,
-    retry-with-feedback, heuristic fallback, and telemetry.
+  - *tool mode*: full structured text state + numbered legal moves + a
+    `submit_move(index)` tool (tests tool use + rule understanding).
+  - *vision mode (play with the UI)*: the board **image only** — no occupancy
+    text, no legal-move list. The model reads the board and submits its move in
+    game terms via `submit_move(action, troop, target)`; `_resolve_visual_move`
+    validates it against `legal_moves` (tests OCR / board reading). Both modes
+    surface the opponent's last action and share retry-with-feedback, heuristic
+    fallback, and telemetry.
 
 - **Data-driven boards.** A terrain is JSON: `nodes` (bases/special bases/HQs),
   `edges` (adjacency + connectivity), `regions` (border bases + medals),

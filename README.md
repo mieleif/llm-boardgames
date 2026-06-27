@@ -89,14 +89,20 @@ pytest                                          # run the test suite
 
 ## How LLMs play
 
-Each turn the agent receives the state and a **numbered list of legal moves**,
-and calls a `submit_move(index)` tool. In **tool mode** it gets the full
-structured text state; in **vision mode** it gets a rendered PNG with per-base
-occupancy withheld, so it must read the board. Effect sub-decisions (Cap'taine,
-Mastok, special bases) are routed back to the agent via a `submit_choice` tool.
-Parsing/illegal responses trigger a retry with feedback, then a heuristic
-fallback — all recorded as metrics. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-and [`docs/RULES.md`](docs/RULES.md).
+- **Tool mode**: the agent gets the full structured text state and a **numbered
+  list of legal moves**, and calls `submit_move(index)`. Tests tool use + rule
+  understanding.
+- **Vision mode (play with the UI)**: the agent gets **only the rendered board
+  image** — no occupancy text and no legal-move list. It must read the board
+  itself and name its move in game terms via `submit_move(action, troop, target)`
+  (e.g. place `Roxy` on `br_c`), which the engine validates against the rules.
+  Tests OCR / board reading.
+
+Both modes also show the **opponent's last action**. Effect sub-decisions
+(Cap'taine, Mastok, special bases) are routed back via a `submit_choice` tool.
+Parse/illegal responses trigger a retry with feedback, then a heuristic fallback
+— all recorded as metrics (`illegal%`). See
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and [`docs/RULES.md`](docs/RULES.md).
 
 ## Roadmap
 
